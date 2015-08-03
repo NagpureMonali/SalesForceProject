@@ -1,0 +1,20 @@
+<apex:page Controller="InvoiceVfPageController">
+	<apex:form >
+		<apex:pageBlock title="Invoice Staments">
+			<apex:pageBlockTable value="{!listInvoice}" var="invoiceObj"
+				id="invoiceTable">
+				<apex:column headerValue="Name Of Customer">
+					<apex:outputLink value="/{!invoiceObj.Id}">{!invoiceObj.Name_Of_Customer__c}</apex:outputLink>
+				</apex:column>
+				<apex:column value="{!invoiceObj.Name}" />
+				<apex:column value="{!invoiceObj.Company_Name__c}" />
+				<apex:column value="{!invoiceObj.Email_Address__c}" />
+				<apex:column headerValue="Action">
+					<apex:commandButton value="Generate PDF" action="{!goToPdfPage}" reRender="true">
+					<apex:param value="{!invoiceObj.Id}" name="invoiceId" />
+					</apex:commandButton>
+				</apex:column>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
