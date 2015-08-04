@@ -2,7 +2,7 @@
 *  It is class to Find the word 'test' in all name fields returning Contact, 
 *  Account, Lead and User.
 *********************************************************************************/
-public with sharing class Sosl {
+public with sharing class SOSL {
     /**
      *  Method to Find the word 'test' in all name fields returning Contact, 
      *  Account, Lead and User
@@ -15,7 +15,7 @@ public with sharing class Sosl {
                                                            Lead(Id,Name), 
                                                            User(Id,Name)
                                           ];
-        System.debug('Records:'+searchList+'<<<<'); // Print
+        System.debug('Records:' + searchList + '<<<<'); // Print
         return searchList;
     } // End of method
 } // End of Class
