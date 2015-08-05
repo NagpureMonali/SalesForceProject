@@ -7,15 +7,17 @@ private class TestNewTaskOnAccountHandler {
      *  Method to test a task upon successful creation of a new Account.
      */
     static testMethod void testNewTask() {
-        Task newTask = new Task();
+        List<Account> listAccount = new List<Account>();
         Account accountInstance = new Account();
         accountInstance.Name = 'Test Account';
+        listAccount.add(accountInstance);
         Test.startTest();  // Start test
-        insert accountInstance;
+        insert listAccount;
         Test.stopTest();  // End test
-        List<Task> TestListTask = [SELECT subject 
+        List<Task> testListTask = [SELECT Subject 
                                    FROM Task 
-                                   WHERE subject = 'Meeting with Test Account'];
-        System.assertEquals(1,TestListTask.size()); // Check for result				
+                                   WHERE Subject = 'Meeting with Test Account' 
+                                   ];
+        System.assertEquals(1,testListTask.size());
     } // End of method
 } // End of test class
