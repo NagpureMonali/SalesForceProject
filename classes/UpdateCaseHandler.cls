@@ -26,12 +26,12 @@ public with sharing class UpdateCaseHandler {
                                      WHERE a.PersonEmail__c = :supliedEmailCase
                                      OR a.Email_Address__c = :supliedEmailCase
                                     ];
-        for(Case caseInstance : listCase) {
-            if(caseInstance.Origin =='Phone' ||
-               caseInstance.Origin =='Email' || 
-               caseInstance.Origin =='Web' 
+        for (Case caseInstance : listCase) {
+            if (caseInstance.Origin =='Phone' ||
+                caseInstance.Origin =='Email' || 
+                caseInstance.Origin =='Web' 
                ) {
-                 for(Account accountInstance : accountList) {
+                 for (Account accountInstance : accountList) {
                      caseInstance.AccountId = accountInstance.Id;
                      System.debug('---- this is trigger' + trigger.new);
                  } // End of for loop

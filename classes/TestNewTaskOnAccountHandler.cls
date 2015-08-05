@@ -18,6 +18,6 @@ private class TestNewTaskOnAccountHandler {
                                    FROM Task 
                                    WHERE Subject = 'Meeting with Test Account' 
                                    ];
-        System.assertEquals(1,testListTask.size());
+        System.assertEquals(1,testListTask.size()); // Check result 
     } // End of method
 } // End of test class

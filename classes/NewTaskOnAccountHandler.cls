@@ -15,5 +15,5 @@ public with sharing class NewTaskOnAccountHandler {
         } 
         insert listTask; // Insert into task
         return listTask;
-    } // End of method accountRecord
+    } // End of method 
 } // End of class
