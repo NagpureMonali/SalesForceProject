@@ -9,15 +9,13 @@ private class TestNewTaskOnAccountHandler {
     static testMethod void testNewTask() {
         List<Account> listAccount = new List<Account>();
         Account accountInstance = new Account();
-        accountInstance.Name = 'Test Account';
+        accountInstance.Name = 'Test';
         listAccount.add(accountInstance);
         Test.startTest();  // Start test
+        //NewTaskOnAccountHandler objNewTaskOnAccountHandler = new NewTaskOnAccountHandler();
         insert listAccount;
-        Test.stopTest();  // End test
-        List<Task> testListTask = [SELECT Subject 
-                                   FROM Task 
-                                   WHERE Subject = 'Meeting with Test Account' 
-                                   ];
+        List<Task> testListTask =NewTaskOnAccountHandler.accountRecord(listAccount);
+        Test.stopTest();  // End test 
         System.assertEquals(1,testListTask.size()); // Check result 
     } // End of method
 } // End of test class

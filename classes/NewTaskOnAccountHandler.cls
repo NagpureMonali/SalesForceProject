@@ -8,12 +8,22 @@ public with sharing class NewTaskOnAccountHandler {
      */
     public static List<Task> accountRecord(List<Account> listAccount) {
         List<Task> listTask = new List<Task>(); // List of task
-        for (Account accountInstance : listAccount ) { 
+        Map<Id,String> mapAccount = new Map<Id,String>();  
+        for (Account accountInstance : listAccount ) {
+             mapAccount.put(accountInstance.Id,accountInstance.Name);
+             System.debug('===id===' + mapAccount);
             // Create task
             Task taskInstance = new Task(Subject = 'Meeting with ' + accountInstance.Name);
             listTask.add(taskInstance);  // Add task to record
         } 
         insert listTask; // Insert into task
-        return listTask;
+        List<Task> taskList = [SELECT Account.Name, 
+                                      AccountId, 
+                                      Subject 
+                               FROM Task 
+                               WHERE Subject LIKE 'Meeting with %'
+                               ];
+        System.debug('list of tsk ====>: ' + taskList );
+        return taskList;
     } // End of method 
 } // End of class
