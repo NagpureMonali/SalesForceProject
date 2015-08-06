@@ -7,7 +7,7 @@ private class TestAccountContactController {
      * Method to test page redirect from account page to contact page 
      */
     static testMethod void testAccountRedirectToContact() {
-        PageReference  instancePageReference= Page.AccountTable;
+        PageReference  instancePageReference = Page.AccountTable;
         Test.setCurrentPage(instancePageReference);
         AccountContactController objAccountContactController = new AccountContactController();
         String nextPage = objAccountContactController.redirectToContactPage().getUrl();
@@ -18,7 +18,7 @@ private class TestAccountContactController {
      * Method to test page redirect from contact page to account page 
      */
     static testMethod void testContactRedirectToAccount() {
-        PageReference  instancePageReference= Page.ContactTable;
+        PageReference  instancePageReference = Page.ContactTable;
         Test.setCurrentPage(instancePageReference);
         AccountContactController objAccountContactController = new AccountContactController();
         String nextPage = objAccountContactController.redirectToAccountPage().getUrl();
@@ -44,10 +44,6 @@ private class TestAccountContactController {
      */
     static testMethod void testContactRecords() {
         List<Account> accountList = new List<Account>();
-        /*for(Integer i = 0; i <5 ; i++) {
-            Account accountInstance =new Account(Name = 'Test' + i);
-            accountList.add(accountInstance);
-        }*/
         List<Contact> contactList = new List<Contact>();
         for (Integer i = 0; i <5 ; i++) {
             Account accountInstance = new Account(Name = 'Test' + i);
@@ -66,7 +62,7 @@ private class TestAccountContactController {
                                      FROM Contact
                                      ];
         for (Contact contactInstance : contactListInstance) {
-            PageReference  instancePageReference= Page.AccountTable;
+            PageReference  instancePageReference = Page.AccountTable;
             Test.setCurrentPage(instancePageReference);
             ApexPages.currentPage().getParameters().put('Id',contactInstance.AccountId);
             String id = ApexPages.currentPage().getParameters().get('id');
