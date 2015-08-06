@@ -2,11 +2,11 @@
 	<apex:form >
 		<apex:pageBlock title="{!NameOfAccount.Name}">
 			<div align="right">
-				<apex:repeat value="{!aplhaList}" var="listOfAlpha">
-					<apex:commandLink action="{!searchAplha}" rerender="tableContact">
-                            {!listOfAlpha}
-                            <apex:param value="{!listOfAlpha}" name="alpha" /> 
-                    </apex:commandLink> |
+				<apex:repeat value="{!alphabetList}" var="SignleAlphabet">
+					<apex:commandLink action="{!searchAlphabet}" >
+                            {!SignleAlphabet}
+                            <apex:param value="{!SignleAlphabet}" assignTo="{!alphabet}" />
+					</apex:commandLink> |
 				</apex:repeat>
 			</div>
 			<apex:pageBlockTable value="{!listContact}" var="contactObj"
@@ -24,8 +24,7 @@
 				</apex:column>
 			</apex:pageBlockTable>
 			<div align="center">
-				<apex:commandButton value="Redirect"
-					action="{!redirectToAccountPage}" />
+				<apex:commandButton value="Return" action="{!redirectToAccountPage}" />
 			</div>
 			<apex:facet name="footer">
 				<div align="center">
@@ -35,19 +34,19 @@
 		</apex:pageBlock>
 	</apex:form>
 	<script type="text/javascript">
-        function deleteContact(idforContact)
-        {
-          Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.AccountContactController.contactToDelete}',
-                                                    idforContact, function(result, event){
-                                                    if (event.status) {
-                                                    alert(Id+ 'Record Deleted Succesfully..');
-                                                    } 
-                                                    else if(event.type === 'exception') {
-                                                    alert(Id+ 'Record can not deleted');
-                                                    } else {
-                                                    alert(Id+ 'Record can not eleted');
-                                                    }
-        });
-        }
-    </script>
+		function deleteContact(idforContact) {
+			Visualforce.remoting.Manager
+					.invokeAction(
+							'{!$RemoteAction.AccountContactController.contactToDelete}',
+							idforContact, function(result, event) {
+								if (event.status) {
+									alert(Id + 'Record Deleted Succesfully..');
+								} else if (event.type === 'exception') {
+									alert(Id + 'Record can not deleted');
+								} else {
+									alert(Id + 'Record can not eleted');
+								}
+							});
+		}
+	</script>
 </apex:page>
