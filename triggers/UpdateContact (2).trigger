@@ -6,7 +6,7 @@
  *************************************************************************************************/
 trigger UpdateContact on Contact (before insert) {
     if(trigger.isbefore && trigger.isinsert) {
-        System.debug('------trigger fired----');
+        System.debug('-----trigger fired---');
         UpdateContactHandler.contactToUpdate(trigger.new);
     } // End of if
 } // End of class

@@ -1,6 +1,6 @@
 /*************************************************************************************************
  * Here is test class for UpdateHandler.
- ************************************************************************************************/
+ *************************************************************************************************/
 @isTest // Annotation
 private class TestUpdateContactHandler {
     /**
@@ -44,7 +44,7 @@ private class TestUpdateContactHandler {
                                           LastName,
                                           Email 
                                    FROM Contact
-                                   ]; // List of Contact
+                                   ];
         // Check for result
         System.assertequals(null,contactInstance.AccountId,'AccountID will be null'); 
     } // End of Method
@@ -67,7 +67,7 @@ private class TestUpdateContactHandler {
                                           LastName,
                                           Email 
                                    FROM Contact
-                                   ]; // List of Contact
+                                   ];
         System.assertequals(testContact.AccountId,contactInstance.AccountId,
                             'AccountID will be same as provided'
                             ); // Check for result
@@ -83,11 +83,7 @@ private class TestUpdateContactHandler {
         Test.startTest(); // Start Test
         insert testContact;
         Test.stopTest(); // End test
-        Contact contactInstance=[SELECT AccountID,
-                                        LastName,
-                                        Email 
-                                 FROM Contact
-                                ];
+        Contact contactInstance=[SELECT AccountID,LastName,Email FROM Contact];
         System.assertequals(null,contactInstance.AccountId,
                             'Domain not exist so null'
                             ); // Check for result
@@ -108,11 +104,7 @@ private class TestUpdateContactHandler {
         insert testAccount;
         insert testContact;
         Test.stopTest(); // End test
-        Contact contactInstance=[SELECT AccountID,
-                                        LastName,
-                                        Email 
-                                 FROM Contact
-                                ];
+        Contact contactInstance=[SELECT AccountID,LastName,Email FROM Contact];
         System.assertequals(testContact.AccountId,contactInstance.AccountId,
                             'Already Given Account ID'
                             ); // Check for result
