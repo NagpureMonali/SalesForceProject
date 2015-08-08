@@ -1,4 +1,4 @@
-/******************************************************************************
+/*******************************************************************************
  *  It is controller class for Account And Contact Object
  ********************************************************************************/
 global with sharing class AccountContactController {
@@ -8,52 +8,54 @@ global with sharing class AccountContactController {
     List<Account> listAccount;
     List<Account> searchedAccount;
     public List<String> alphabetList;
-    public Account NameOfAccount {get;set;}
-    public Id Account_Id {get; set;}//Account Id using get set method
-    public String Name {get; set;}//string using get set method
-    public Integer Count {get;set;}//to count no of records
-    public String findName {get;set;}//to find account name from search field
-    public String alphabet {get;set;}
-    public List<Contact> getlistContact() {
-        /**
-         *  This method will fetch account records and contact records 
-         */ 
-         // here will get Id of currentt page
-         Account_Id=apexpages.currentpage().getparameters().get('mona');
-         System.debug('-----method Contact List -----' + Account_Id);
-         if (alphaFlag == false) {
-             NameOfAccount = [SELECT Name 
-                              FROM Account 
-                              WHERE Id = :Account_Id
-                              ];
-             listContact = [SELECT c.Id,
-                                   c.Name,
-                                   c.Account.Name,
-                                   c.Department,
-                                   c.Email 
-                            FROM Contact c 
-                            WHERE c.Account.Id = :Account_Id
-                           ];//query to fetch contact records
-            Count = listContact.size();
-            System.debug('-----Contact List in if -----' + Account_Id);
+    public Account accountName {get;set;}
+    public Id idOfAccount {get; set;} // Account Id using get set method
+    public String name {get; set;} // String using get set method
+    public Integer counter {get;set;} // To count no of records
+    public String findName {get;set;} // To find account name from search field
+    public String alphabet {get;set;} 
+    
+    /**
+     *  This method will fetch account records and contact records 
+     */
+    public List<Contact> getlistContact() { 
+        // Here will get Id of current page
+        idOfAccount = apexpages.currentpage().getparameters().get('mona');
+        System.debug('-----method Contact List -----' + idOfAccount);
+        if (!alphaFlag) {
+            accountName = [SELECT Name 
+                           FROM Account 
+                           WHERE Id = :idOfAccount
+                           ];
+            System.debug('----Account Name -----' + accountName);
+            listContact = [SELECT c.Id,
+                                  c.Name,
+                                  c.Account.Name,
+                                  c.Department,
+                                  c.Email 
+                           FROM Contact c 
+                           WHERE c.Account.Id = :idOfAccount
+                          ];//query to fetch contact records
+            counter = listContact.size();
+            System.debug('-----Contact List in if -----' + idOfAccount);
             //return the list of contact which are fetched in query
             return listContact;
-         } else {
-             NameOfAccount = [SELECT Name 
-                              FROM Account 
-                              WHERE Id = :Account_Id
-                             ];
-             listContact = [SELECT c.Id,
-                                   c.Name,
-                                   c.Account.Name,
-                                   c.Department,
-                                   c.Email 
-                            FROM Contact c 
-                            WHERE c.Account.Id = :Account_Id 
-                            AND c.Name LIKE : alphabet+'%'
+        } else {
+            accountName = [SELECT Name 
+                           FROM Account 
+                           WHERE Id = :idOfAccount
+                          ];
+            listContact = [SELECT c.Id,
+                                  c.Name,
+                                  c.Account.Name,
+                                  c.Department,
+                                  c.Email 
+                           FROM Contact c 
+                           WHERE c.Account.Id = :idOfAccount 
+                           AND c.Name LIKE : alphabet + '%'
                            ];//query to fetch contact records
-            Count = listContact.size();
-            System.debug('-----Contact List in else-----' + Account_Id);
+            counter = listContact.size();
+            System.debug('-----Contact List in else-----' + idOfAccount);
             //return the list of contact which are fetched in query
             //alphaFlag =false;
             return listContact;
@@ -73,7 +75,7 @@ global with sharing class AccountContactController {
      *  Merthod to get list of Account Object
      */
     public List<Account> getlistAccount() { 
-        if (flag == false) {
+        if (!flag) {
             listAccount = [SELECT Id,
                                   Name,
                                   Email_Address__c,
@@ -81,7 +83,7 @@ global with sharing class AccountContactController {
                                   Website
                            FROM Account
                           ];//query to fetch account records
-            Count = listAccount.size();
+            counter = listAccount.size();
             return listAccount;
         } else {
             listAccount = [SELECT Id,
@@ -91,21 +93,21 @@ global with sharing class AccountContactController {
                                   Website
                            FROM Account 
                            WHERE Name 
-                           like  : '%'+findName+'%'
+                           like  : '%' + findName + '%'
                           ];//query to fetch account records
-        Count = listAccount.size();
+        counter = listAccount.size();
         return listAccount;
         } // End of else
     } // End of method
 
     /*
-     *  Method to redirect From Account to Contact Page
+     *  Method to redirect from Account to Contact Page
      */
     public PageReference redirectToContactPage() {
         //get acount id using getparameters
-        Account_Id = apexpages.currentpage().getparameters().get('AccountName');
-        System.debug('-----redirect page-----' + Account_Id);
-        PageReference contactPage = new PageReference('/apex/ContactTable?mona=' + Account_Id);
+        idOfAccount = apexpages.currentpage().getparameters().get('accountId');
+        System.debug('-----redirect page account id-----' + idOfAccount);
+        PageReference contactPage = new PageReference('/apex/ContactTable?mona=' + idOfAccount);
         contactPage.setRedirect(True);
         return contactPage;
     } // End of method
@@ -124,7 +126,7 @@ global with sharing class AccountContactController {
                                 );
            // System.alert('Input at least 3 characters to perform search');
         } else {
-            // else display list of account having name similar to account name provided in search 
+            // Else display list of account having name similar to account name provided in search 
             flag = true; //set flage true
             System.debug('--- in else block--');
         }
@@ -152,7 +154,7 @@ global with sharing class AccountContactController {
      * Method to search alphabet as provided
      */
     public void searchAlphabet() {
-        alphabet = apexpages.currentpage().getparameters().get('searchAlphabet');
+        alphabet = apexpages.currentpage().getparameters().get('alphabet');
         System.debug('=======alpha========' + alphabet);
         alphaFlag = true;
         getlistContact();
@@ -163,17 +165,17 @@ global with sharing class AccountContactController {
      * Remote method to delete contact records
      */
     @RemoteAction // Annotation
-    global static void contactToDelete(Id Contact_Id) {
-        System.debug('====contact id======' + Contact_Id);
+    global static void contactToDelete(Id idForContact) {
+        System.debug('====contact id======' + idForContact);
         //Contact contactInstance = new Contact();
         List<Contact> listContact = [SELECT ID 
                                      FROM Contact 
-                                     WHERE Id = :Contact_Id
+                                     WHERE Id = :idForContact
                                     ];
         delete listContact;
         List<Contact> newListContact = [SELECT ID 
-                                     FROM Contact
-                                     ];
+                                        FROM Contact
+                                       ];
        // return contactToDelete;
     } // End of remote method
 } // End of class
