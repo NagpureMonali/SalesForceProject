@@ -1,20 +1,117 @@
-<apex:page standardController="Invoice_Statement__c" renderAs="PDF">
+<apex:page standardController="Invoice_Statement__c" renderAs="PDF"
+	showHeader="false" sidebar="false" standardStylesheets="false"
+	applyBodyTag="false" applyHtmlTag="false">
 	<html>
-<head>
-<table>
-	<tr>
-		<td><h3>ABC Container</h3></td>
-	</tr>
-	<tr>
-		<td>[street Address]</td>
-	</tr>
-	<tr>
-		<td>[City, ST ZIP]</td>
-	</tr>
-	<tr>
-		<td>Phone: (000) 000-0000</td>
-	</tr>
-</table>
-</head>
-	</html>
+        <head>
+            <style>
+                .companyName {
+                   Font-size: 40x;
+                }
+
+                .BillTo {
+                   Font-size: 20x;
+                }
+
+                table,th,td {
+                  background-color: #D2D9EB;
+                   border: 1px solid black;
+             }
+
+                td {
+                   background-color: white;
+                }
+
+                th {
+                   background-color: #D2D9EB;
+                   width: 40%
+                }
+
+                h1 {
+                   color: Black;
+                   Font-size: 20px;
+                   Text Align: Left;
+                }
+
+                h2 {
+                   color: Black;
+                   Font-size: 20px;
+                   Text-align: Left;
+                }
+
+                h3 {
+                   color: #5CADFF;
+                   Font-size: 30px;
+                   text-align: right;
+                }
+
+                h4 {
+                   color: Black;
+                   Font-size: 20px;
+                   Text-align: Left;
+                }
+            </style>
+        </head>
+    <body>
+        <h3>INVOICE</h3>
+        <div>
+            <h4>[COMAPNY DEATILS]</h4>
+            <span class="companyName" align="left" style="width: 20%"> <b>ABC
+                CONTAINERS</b><br /> <b>NSG IT Park, Pune</b><br />
+            </span> 
+            <span align="right">
+                <table border="1" style="width: 50%; margin-right: 0px; margin-left: auto;">
+                    <tr>
+                        <th>INVOICE</th>
+                        <th>DATE</th>
+                    </tr>
+                    <tr>
+                        <td>{!Invoice_Statement__c.Name}</td>
+                        <td><apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+                                <apex:param value="{!Invoice_Statement__c.Date__c}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </table>
+            </span>
+        </div>
+        <table>
+            <tr>
+                <th>BILL TO</th>
+            </tr>
+        </table>
+        <div class="BillTo">
+            {!Invoice_Statement__c.Name_Of_Customer__c} <br />
+            {!Invoice_Statement__c.Company_Name__c}<br />
+            {!Invoice_Statement__c.Stree_Address__c}<br />
+            {!Invoice_Statement__c.City__c}<br />
+            {!Invoice_Statement__c.Email_Address__c}<br />
+            {!Invoice_Statement__c.Phone_Number__c}<br /> <br />
+        </div>
+        <br />
+        <br />
+        <br />
+        <table style="width: 100%; border: 2px solid black; bgcolor: #D2D9EB;">
+            <tr>
+                <th>Description</th>
+                <th>Unit Sold</th>
+                <th>Unit price</th>
+                <th>Amount</th>
+            </tr>
+            <apex:repeat value="{!Invoice_Statement__c.Line_Item__r}" var="line">
+                <tr>
+                    <td style="width: 100%; border: 0 none">
+                        {!line.Description_of_Item__c}
+                    </td>
+                    <td>{!line.Unit_Sold__c}</td>
+                    <td>{!line.Unit_Price__c}</td>
+                    <td>{!line.Amount__c}</td>
+                </tr>
+            </apex:repeat>
+            <tr>
+                <td>Grand Total : {!Invoice_Statement__c.Grand_Final_Total__c}</td>
+            </tr>
+        </table>
+        <h4 style="width: 60%;">Thank You for the business</h4>
+    </body>
+    </html>
 </apex:page>
