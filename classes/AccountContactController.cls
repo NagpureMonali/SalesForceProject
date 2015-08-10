@@ -115,7 +115,7 @@ global with sharing class AccountContactController {
     /*
      *  Method to search for account name from search text box
      */
-    public void searchAccount() {
+    public Boolean searchAccount() {
         System.debug('-- in method--' + findName);
         if(findName.Length()<3) {
            //if word length is less than 3 then show error msg and set flag to false
@@ -124,20 +124,23 @@ global with sharing class AccountContactController {
            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.INFO,
                                 'Input at least 3 characters to perform search')
                                 );
+                                return flag;
            // System.alert('Input at least 3 characters to perform search');
         } else {
             // Else display list of account having name similar to account name provided in search 
             flag = true; //set flage true
             System.debug('--- in else block--');
+            return flag;
         }
     } // End of Method
     
     /**
      * Method to clear text field
      */
-    public void getclearInputText() {
+    public String getclearInputText() {
         System.debug('----- in clear block---');
         findname = ' ';
+        return null;
     } // End of method
 
     /**
@@ -153,19 +156,19 @@ global with sharing class AccountContactController {
     /**
      * Method to search alphabet as provided
      */
-    public void searchAlphabet() {
+    public Boolean searchAlphabet() {
         alphabet = apexpages.currentpage().getparameters().get('alphabet');
         System.debug('=======alpha========' + alphabet);
         alphaFlag = true;
         getlistContact();
-       // return searchAplha;
+        return alphaFlag;
     } // End of method
     
     /**
      * Remote method to delete contact records
      */
     @RemoteAction // Annotation
-    global static void contactToDelete(Id idForContact) {
+    global static List<Contact> contactToDelete(Id idForContact) {
         System.debug('====contact id======' + idForContact);
         //Contact contactInstance = new Contact();
         List<Contact> listContact = [SELECT ID 
@@ -176,6 +179,7 @@ global with sharing class AccountContactController {
         List<Contact> newListContact = [SELECT ID 
                                         FROM Contact
                                        ];
+        return listContact;
        // return contactToDelete;
     } // End of remote method
 } // End of class
