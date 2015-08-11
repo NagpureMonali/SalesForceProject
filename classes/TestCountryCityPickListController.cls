@@ -9,7 +9,7 @@ private class TestCountryCityPickListController {
     static testMethod void testCityList() {
         CountryCityPickListController objCountryCityPickListController = 
                                       new CountryCityPickListController();
-        system.assertEquals(0,objCountryCityPickListController.cityChange().size());
+        System.assertEquals(0,objCountryCityPickListController.cityChange().size());
     }
     
     /**
@@ -23,7 +23,7 @@ private class TestCountryCityPickListController {
         CountryCityPickListController objCountryCityPickListController = 
                                       new CountryCityPickListController();
         Test.stopTest();
-        system.assertEquals(1,objCountryCityPickListController.countryListPicklist().size());
+        System.assertEquals(1,objCountryCityPickListController.countryListPicklist().size());
     }
     
     /**
@@ -44,6 +44,6 @@ private class TestCountryCityPickListController {
                                       new CountryCityPickListController();
         objCountryCityPickListController.selectCountryOption = 'India';
         Test.stopTest();
-        system.assertEquals(cityList.size(),objCountryCityPickListController.cityChange().size());
+        System.assertEquals(cityList.size(),objCountryCityPickListController.cityChange().size());
     }
 }

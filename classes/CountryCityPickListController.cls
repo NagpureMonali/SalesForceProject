@@ -7,15 +7,33 @@
 public with sharing class CountryCityPickListController {
     public String selectCountryOption {get;set;}
     public String selectCityOption {get;set;}
-    public List<SelectOption> cityList{get;set;}
-    public List<SelectOption> countryList{get;set;}
-    
+    public List<SelectOption> cityList {get;set;}
+    public List<SelectOption> countryList {get;set;}
+    Map<String,List<String>> mapCountryCity;
     /**
      *  Here is a counstructor which calls method countryPicklist.
      *  that will Add the values Before the page is loaded.
      */
     public CountryCityPickListController() {
         countryListPicklist();
+        cityList = new  List<SelectOption>();
+        mapCountryCity = new Map<String,List<String>>();
+        List<City__c> listCity = [SELECT Name, 
+                                         Country__c
+                                  FROM  City__c 
+                                 ];
+        System.debug('==cityList===' + listCity);
+        for (City__c cityInstance : listCity) {
+            if (!mapCountryCity.containsKey(cityInstance.Country__c)) {
+                mapCountryCity.put(cityInstance.Country__c,new List<String>{cityInstance.Name});
+            } else {
+                List<String> testCityList = new List<String>();
+                testCityList.addAll(mapCountryCity.get(cityInstance.Country__c));
+                testCityList.add(cityInstance.Name);
+                mapCountryCity.put(cityInstance.Country__c,testCityList);
+            }
+        }
+        System.debug('==mapCountryCity===' + mapCountryCity);
     }
     
     /**
@@ -33,15 +51,11 @@ public with sharing class CountryCityPickListController {
     /**
      *  Here is a method that will show city list.
      */
-    public List<SelectOption> cityChange() { 
+    public void cityChange() { 
         cityList = new  List<SelectOption>();
-        for (City__c cityListInstance :[SELECT Name
-                                        FROM  City__c 
-                                        WHERE Country__c= :selectCountryOption
-                                        ]
-            ) {
-            cityList.add(new SelectOption(cityListInstance.Name,cityListInstance.Name));
-        } // End of for Loop
-        return cityList;
+        List<string> listString = new List<string>(mapCountryCity.get(selectCountryOption)); 
+        for(string stringInstance :listString){     
+            cityList.add(new SelectOption(stringInstance, stringInstance));
+        } // End of for loop
     } // End of Method
 } // End of controller
