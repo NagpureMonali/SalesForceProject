@@ -1,5 +1,0 @@
-<apex:component controller="AccountContactController">
-    <apex:attribute name="counter" description="The total number of record we are viewing."
-                    type="Integer" required="true"/>   
-    <apex:outputText value="{!counter}"></apex:outputText>             
-</apex:component>
