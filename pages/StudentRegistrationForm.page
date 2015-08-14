@@ -6,7 +6,7 @@
 				multiselect="false">
 				<apex:pageMessages id="messgae" />
 				<apex:selectOptions value="{!languageList}" />
-				<apex:actionsupport event="onchange" rerender="pageStudent" />
+				<apex:actionsupport event="onchange" />
 			</apex:selectList>
 			<br />
 			<br />
