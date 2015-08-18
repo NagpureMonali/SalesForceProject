@@ -3,47 +3,53 @@
  */
 @isTest  // Annotation
 private class TestCountryCityPickListController {
+    public static List<City__c> testCityList = new List<City__c>();
+    
+    /**
+     *  Factory method to insert country and city
+     */
+    static testMethod void insertCountryCity() {
+        Country__c countryInstance = new Country__c(); 
+        countryInstance.Name = 'India';
+        City__c cityInstance = new City__c();
+        cityInstance.Name = 'Kolkata';
+        cityInstance.Country__c = 'India';
+        testCityList.add(cityInstance);    
+        insert countryInstance;
+        insert testCityList;
+    }
+    
     /**
      *  Method to test City list is now displaying when page is on new loading
      */
     static testMethod void testCityList() {
         CountryCityPickListController objCountryCityPickListController = 
                                       new CountryCityPickListController();
-        System.assertEquals(0,objCountryCityPickListController.cityChange().size());
-    }
+        System.assertEquals(0,objCountryCityPickListController.cityList.size());
+    } // End of method
     
     /**
      *  Method to test Country list is displaying all values which it holds
      */
     static testMethod void testCountryList() {
-        Country__c countryInstance = new Country__c(); 
-        countryInstance.Name = 'India';
-        Test.startTest();
-        insert countryInstance;
+        Test.startTest(); // Start test
+        insertCountryCity();
         CountryCityPickListController objCountryCityPickListController = 
                                       new CountryCityPickListController();
-        Test.stopTest();
+        Test.stopTest(); // Stop test
         System.assertEquals(1,objCountryCityPickListController.countryListPicklist().size());
-    }
+    } // End of method
     
     /**
      *  Method to test displaying all related city
      */
     static testMethod void testDisplayingRelatedCityList() {
-        Country__c countryInstance = new Country__c(); 
-        countryInstance.Name = 'India';
-        List<City__c> cityList = new List<City__c>();
-        City__c cityInstance = new City__c();
-        cityInstance.Name = 'Kolkata';
-        cityInstance.Country__c = 'India';
-        cityList.add(cityInstance);    
-        Test.startTest();
-        insert countryInstance;
-        insert cityList;
+        Test.startTest(); // Start test
+        insertCountryCity();
         CountryCityPickListController objCountryCityPickListController=
                                       new CountryCityPickListController();
         objCountryCityPickListController.selectCountryOption = 'India';
-        Test.stopTest();
-        System.assertEquals(cityList.size(),objCountryCityPickListController.cityChange().size());
+        Test.stopTest(); // Stop test
+        System.assertEquals(testCityList.size(),objCountryCityPickListController.cityList.size());
     }
 }
