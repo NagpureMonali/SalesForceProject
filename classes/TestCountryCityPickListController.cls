@@ -8,7 +8,7 @@ private class TestCountryCityPickListController {
     /**
      *  Factory method to insert country and city
      */
-    static testMethod void insertCountryCity() {
+    static void insertCountryCity() {
         Country__c countryInstance = new Country__c(); 
         countryInstance.Name = 'India';
         City__c cityInstance = new City__c();
