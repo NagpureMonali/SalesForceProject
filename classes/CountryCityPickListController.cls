@@ -18,11 +18,7 @@ public with sharing class CountryCityPickListController {
         countryListPicklist();
         cityList = new  List<SelectOption>();
         mapCountryCity = new Map<String,List<String>>();
-        for (City__c cityInstance : [SELECT Name, 
-                                            Country__c
-                                     FROM  City__c 
-                                    ]
-             ) {
+        for (City__c cityInstance : City__c.getAll().values()) {
             if (!mapCountryCity.containsKey(cityInstance.Country__c)) {
                 mapCountryCity.put(cityInstance.Country__c,new List<String>{cityInstance.Name});
             } else {
@@ -55,5 +51,5 @@ public with sharing class CountryCityPickListController {
         for(string cityInstance :listOfCity){     
             cityList.add(new SelectOption(cityInstance, cityInstance));
         } // End of for loop
-    } // End of Method
+    } // End of method
 } // End of controller
