@@ -4,14 +4,13 @@
 ***************************************************************************************************/
 public class QueryBuilderController {
     public String objectName {get;set;}
-    public String[] objectFieldName {get;set;}
-    public String[] orderByFieldName {get;set;}
+    public List<String> objectFieldName {get;set;}
     public List<SelectOption> selectedObject {get;set;}
     public List<SelectOption> selectedObjectFields {get;set;}
     public String selectedRadio {get;set;}
     public Integer selectedNumber {get;set;}
     public String query {get;set;}
-    public List<SObject> queryList {get;set;}
+    public List<SObject> queryResult {get;set;}
     public List<SelectOption> sortOptions; 
     public List<SelectOption> recordNoOptions;
     
@@ -21,7 +20,8 @@ public class QueryBuilderController {
     public QueryBuilderController() {
         selectedRadio = 'Ascending';
         selectedNumber = 500;
-        query= ' ';
+        query = '';
+        objectFieldName = new List<String>();
     }
     
     /**
@@ -47,17 +47,17 @@ public class QueryBuilderController {
      *  This is the method which displays the fields of selected object.
      */
     public void getobjectFields() {
-            Map<String, Schema.SObjectType> allObjectMap = Schema.getGlobalDescribe();
-            System.debug('===objectName====' + objectName);
-            Schema.SObjectType ObjectSchema = allObjectMap.get(objectName);
-            Map<String, Schema.SObjectField> fieldMap = ObjectSchema.getDescribe().fields.getMap();
-            selectedObject = new List<SelectOption>();
-            for (String fieldName : fieldMap.keySet()) {  
-                selectedObject.add(new SelectOption(fieldName,fieldName));
-            }
-            selectedObject.sort();
-            System.debug('===selectedObject====' + selectedObject);
-            //return selectedObject;
+        Map<String, Schema.SObjectType> allObjectMap = Schema.getGlobalDescribe();
+        System.debug('===objectName====' + objectName);
+        Schema.SObjectType objectSchema = allObjectMap.get(objectName);
+        Map<String, Schema.SObjectField> fieldMap = objectSchema.getDescribe().fields.getMap();
+        selectedObject = new List<SelectOption>();
+        for (String fieldName : fieldMap.keySet()) {  
+            selectedObject.add(new SelectOption(fieldName,fieldName));
+        }
+        selectedObject.sort();
+        System.debug('===selectedObject====' + selectedObject);
+        //return selectedObject;
     }
     
     /**
@@ -87,9 +87,9 @@ public class QueryBuilderController {
      */
     public void displayQuery() {
         if (selectedRadio == 'Ascending') {
-            selectedRadio='';
+            selectedRadio =' ASC ';
         } else {
-            selectedRadio= ' DESC';
+            selectedRadio = ' DESC ';
         } // End of else block
         try{
             query = 'SELECT' + objectFieldName + 'FROM ' + objectName + ' ORDER BY ' + 
@@ -98,13 +98,13 @@ public class QueryBuilderController {
             query = query.replace('(',' ');
             query = query.replace(')',' ');
             System.debug('queryfinal===============' + query);
-            querylist = Database.query(query);
-            System.debug('querylist result===============' + querylist);
-            } catch (Exception error) {
-                System.debug('Error Message in query');
-                ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,
-                                'Error is occured, You should select 1 object and atleast 1 Field')
-                                    );
-            } // End of catch block
+            queryResult = Database.query(query);
+            System.debug('queryResult ===============' + queryResult);
+        } catch (Exception error) {
+            System.debug('Error Message in query');
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.ERROR,
+                                 'Error occured, You should select 1 object and atleast 1 Field')
+                                 );
+        } // End of catch block
     } // End of method
 } // End of class

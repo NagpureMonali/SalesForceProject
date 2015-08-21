@@ -63,7 +63,7 @@
 			Result of Query : <br />
 		</h1>
 		<apex:pageBlock id="textAreaResult">
-			<apex:pageBlockTable value="{!querylist}" var="SingleRecord">
+			<apex:pageBlockTable value="{!queryResult}" var="SingleRecord">
 				<apex:repeat value="{!objectFieldName}" var="Record">
 					<apex:column value="{!SingleRecord[Record]}" />
 				</apex:repeat>

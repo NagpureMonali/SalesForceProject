@@ -3,46 +3,53 @@
  *************************************************************************************************/
 @isTest // Annotation
 private class TestQueryBuilderController {
+    
     /**
      *  Method to test displaying all objects from org.
      */
     static testMethod void testAllObject() {
         // Creating instance of class
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        List<SelectOption> testlistobject = new List<SelectOption>();
-        test.startTest(); // Start test
-        testlistobject = objQueryBuilderController.getallObjectName();
-        test.stopTest(); // Stop test
-        System.assertEquals(339,testlistobject.size());
-    }
-    
+        List<Schema.SObjectType> testListOfAllObjects = Schema.getGlobalDescribe().Values();
+        Test.startTest(); // Start test
+        List<SelectOption> testlistobject = objQueryBuilderController.getallObjectName();
+        Test.stopTest(); // Stop test
+        System.assertEquals(testListOfAllObjects.size(),testlistobject.size());
+    } // End of method
+     
     /**
-     *  Method to test not displaying all objects from org.(remian to test again)
+     *  Method to test not displaying objects from org.
      */
     static testMethod void testNotAllObject() {
         // Creating instance of class
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        List<SelectOption> testlistobject = new List<SelectOption>();
-        test.startTest(); // Start test
-        testlistobject = objQueryBuilderController.getallObjectName();
-        test.stopTest(); // Stop test
-        System.assertEquals(339,testlistobject.size());
-    }
-    
+        Test.startTest(); // Start test
+        List<SelectOption> testlistobject = objQueryBuilderController.getallObjectName();
+        Test.stopTest(); // Stop test
+        System.assertNotEquals(null,testlistobject.size());
+    } // End of method
     
     /**
-     *  Method to test displaying selected object fields from org.
+     *  Method to test displaying selected object fields from org. 
      */
     static testMethod void testFieldsOfObject() {
         // Creating instance of class
+        Map<String, Schema.SObjectType> allObjectMap = Schema.getGlobalDescribe();
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        test.startTest(); // Start test
+        Schema.SObjectType testObjectSchema = allObjectMap.get('Account');
+        Map<String, Schema.SObjectField> fieldMap = testObjectSchema.getDescribe().fields.getMap();
+        List<SelectOption> testSelectedObject = new List<SelectOption>();
+        for (String fieldName : fieldMap.keySet()) {  
+            testSelectedObject.add(new SelectOption(fieldName,fieldName));
+        }
         objQueryBuilderController.objectName = 'Account';
-        //change this
-        //List<SelectOption> testlistobject = objQueryBuilderController.getobjectFields();
-        test.stopTest(); // Stop test
-        //System.assertEquals(68,testlistobject.size());
-    }
+        Test.startTest(); // Start test
+        objQueryBuilderController.getobjectFields();
+        Test.stopTest(); // Stop test
+        System.assertEquals(testSelectedObject.size(),
+                            objQueryBuilderController.selectedObject.size()
+                           );
+    } // End of method
     
     /**
      *  Method to test radio button showing both values or not
@@ -50,11 +57,11 @@ private class TestQueryBuilderController {
     static testMethod void testRadioButton() {
         // Creating instance of class
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        test.startTest(); // Start test
+        Test.startTest(); // Start test
         List<SelectOption> testlistobject = objQueryBuilderController.getradioOptions();
-        test.stopTest(); // Stop test
+        Test.stopTest(); // Stop test
         System.assertEquals(2,testlistobject.size());
-    }
+    } // End of method
     
     /**
      *  Method to test radio button selecting 1 option at a time or not
@@ -62,12 +69,12 @@ private class TestQueryBuilderController {
     static testMethod void testRadioButtonSelection() {
         // Creating instance of class
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        test.startTest(); // Start test
+        Test.startTest(); // Start test
         List<SelectOption> testlistobject = objQueryBuilderController.getradioOptions();
-        test.stopTest(); // Stop test
+        Test.stopTest(); // Stop test
         // When page loads it sets default value as Ascending so checking with it
         System.assertEquals('Ascending',objQueryBuilderController.selectedRadio);
-    }
+    } // End of method
     
     /**
      *  Method to test radio button selecting descending opion
@@ -75,13 +82,13 @@ private class TestQueryBuilderController {
     static testMethod void testRadioButtonDescending() {
         // Creating instance of class
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        test.startTest(); // Start test
+        Test.startTest(); // Start test
         objQueryBuilderController.selectedRadio='Descending';
         List<SelectOption> testlistobject = objQueryBuilderController.getradioOptions();
-        test.stopTest(); // Stop test
+        Test.stopTest(); // Stop test
         
         //System.assertEquals('Descending',testlistobject.getLabel());
-    }
+    } // End of method
     
     /**
      *  Method to test number of records that query will retrieve
@@ -89,44 +96,64 @@ private class TestQueryBuilderController {
     static testMethod void testNoOfRecords() {
         // Creating instance of class
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        test.startTest(); // Start test
+        Test.startTest(); // Start test
         List<SelectOption> testlistobject = objQueryBuilderController.getlistNumber();
-        test.stopTest(); // Stop test
+        Test.stopTest(); // Stop test
         // When page loads it sets default value as 500 so checking with it
         System.assertEquals(500,objQueryBuilderController.selectedNumber);
-    }
+    } // End of method
      
     /**
-     *  Method to test if query gives an exception
+     *  Method to test if query gives an exception 
+     *  (Here it will give error because i have not passed object fields)
      */
     static testMethod void testQuery() {
         // Creating instance of classs
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        test.startTest(); // Start test
         objQueryBuilderController.selectedRadio = 'Ascending';
         objQueryBuilderController.selectedNumber = 500;
         objQueryBuilderController.objectName = 'Account';
+        Test.startTest(); // Start test
         objQueryBuilderController.displayQuery();
-        List<Apexpages.Message> testMessage=Apexpages.getMessages();
-        test.stopTest(); // Stop test
+        List<Apexpages.Message> testMessage = Apexpages.getMessages();
+        Test.stopTest(); // Stop test
         System.assertEquals(1,testMessage.size());
-     }
+     } // End of method
      
      /**
-     *  Method to test if required query is generated or not(needs to test one more time)
+     *  Method to test if required query is generated or not
      */
     static testMethod void testQueryGeneration() {
-        // Creating instance of classs
+        // Creating instance of classs 
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        test.startTest(); // Start test
-        objQueryBuilderController.selectedRadio = 'Ascending';
+        String testQuery ='SELECT id, name FROM Account ORDER BY id DESC LIMIT 500';
+        objQueryBuilderController.selectedRadio = 'Descending';
         objQueryBuilderController.selectedNumber = 500;
         objQueryBuilderController.objectName = 'Account';
-        //change this also
-        //List<SelectOption> testlistobject = objQueryBuilderController.getobjectFields();
+        objQueryBuilderController.objectFieldName.add('id');
+        objQueryBuilderController.objectFieldName.add('name');
+        Test.startTest(); // Start test
         objQueryBuilderController.displayQuery();
-        String testQuery='SELECT id,name FROM Account ORDER BY id LIMIT 500';
-        test.stopTest(); // Stop test
+        Test.stopTest(); // Stop test
         System.assertEquals(testQuery,objQueryBuilderController.query);
-     }
-}
+        System.assertNotEquals(null,objQueryBuilderController.query);
+     } // End of method
+      
+     /**
+     *  Method to test if required query giving correct result or not
+     */
+    static testMethod void testQueryResult() {
+        // Creating instance of classs  
+        QueryBuilderController objQueryBuilderController = new QueryBuilderController();
+        objQueryBuilderController.selectedRadio = 'Descending';
+        objQueryBuilderController.selectedNumber = 500;
+        objQueryBuilderController.objectName = 'Account';
+        objQueryBuilderController.objectFieldName.add('id');
+        objQueryBuilderController.objectFieldName.add('name');
+        Test.startTest(); // Start test
+        List<Account> testAccountList = [SELECT id, name FROM Account ORDER BY id DESC LIMIT 500];
+        objQueryBuilderController.displayQuery();
+        Test.stopTest(); // Stop test
+        System.assertEquals(testAccountList.size(),objQueryBuilderController.queryResult.size());
+     } // End of method
+} // End of test class
