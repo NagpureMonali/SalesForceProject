@@ -8,9 +8,10 @@
 				multiselect="false">
 				<apex:selectOption itemlabel="none" itemvalue=" " />
 				<apex:selectOptions value="{!fieldSelectionCriteria}" />
-				<apex:actionSupport event="onchange" action="{!objectField}"
-					reRender="formid" />
 			</apex:SelectList>
-		</apex:pageBlock> 
-	</apex:form> 
+			<apex:pageMessages id="message" />
+			<apex:commandButton action="{!objectField}" value="Submit"
+				rerender="message" />
+		</apex:pageBlock>
+	</apex:form>
 </apex:page>

@@ -1,10 +1,16 @@
+/**
+ *  Here is controller for RemovalOfDuplicateRecords class 
+ */
 public with sharing class RemovalOfDuplicateRecordsController {
     public String selectCriteria {get;set;}
     public String criteria;
     public String objectField {get;set;} 
     
+    /*
+     *  Here is constructor
+     */
     public RemovalOfDuplicateRecordsController() {
-        criteria = 'Email';
+        //selectCriteria = 'Email';
         System.debug('=====on page load Criteria======' + criteria);
         System.debug('=====on page load selectCriteria======' + selectCriteria);
     }
@@ -20,11 +26,22 @@ public with sharing class RemovalOfDuplicateRecordsController {
         return selectionCriteria;
     }
     
+    /**
+     *  This is the method which displays fields for selected criteria to batch class
+     */
     public void objectField() {
-        System.debug('=====in other method selectCriteria======' + selectCriteria);
+        System.debug('=====on button click selectCriteria======' + selectCriteria);
         criteria = selectCriteria;
-        System.debug('=====in other methods Criteria======' + criteria);
-        RemovalOfDuplicateLeadsBatchJob obj=new RemovalOfDuplicateLeadsBatchJob(criteria); 
-        database.executeBatch(obj,8); 
-    }
-}
+        System.debug('=====on button click Criteria======' + criteria);
+        LeadName__c LeadNameInstance = new LeadName__c();
+        LeadNameInstance = [SELECT Name FROM LeadName__c WHERE Name = 'Test'];
+        LeadNameInstance.Criteria__c = selectCriteria;
+        update LeadNameInstance;
+        System.debug('=====on button click LeadName__cInstance.Criteria__c======' + LeadNameInstance.Criteria__c);
+        ApexPages.addmessage(new ApexPages.message(ApexPages.severity.INFO,
+                                 'Criteria field is set to ' + selectCriteria)
+                                 );
+        //RemovalOfDuplicateLeadsBatchJob obj=new RemovalOfDuplicateLeadsBatchJob(criteria); 
+        //database.executeBatch(obj,8); 
+    } // End of method
+} // End of class

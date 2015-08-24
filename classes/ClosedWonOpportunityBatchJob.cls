@@ -6,7 +6,7 @@
  *     opportunities of that account in a day & send an email to Primary Contact. 
  *  3. The email body should contain the Opportunity Name & it's respective amount with the 
  *     aggregated amount in the end. 
- */
+ **************************************************************************************************/
 public with sharing class ClosedWonOpportunityBatchJob  implements Database.Batchable<sObject>,
                                                                    Database.Stateful {
     // Map of email adress and whole opportunity instance declartion
@@ -92,4 +92,4 @@ public with sharing class ClosedWonOpportunityBatchJob  implements Database.Batc
         Decimal amount = 0;
         String Email;
     } // End of method
-}
+} // End of class

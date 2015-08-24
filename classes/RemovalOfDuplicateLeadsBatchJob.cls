@@ -11,8 +11,11 @@ public with sharing class RemovalOfDuplicateLeadsBatchJob implements Database.Ba
     List<Lead> leadList = new List<Lead>(); 
     String criteria; 
     String query='SELECT Id, Name, Email FROM Lead WHERE Name <> NULL AND Email <> NULL';
-    public RemovalOfDuplicateLeadsBatchJob(String field) {
-        criteria = field;
+    public RemovalOfDuplicateLeadsBatchJob() {
+        for (LeadName__c LeadNameInstance : LeadName__c.getAll().values()) {
+            criteria = LeadNameInstance.Criteria__c;
+        }
+        System.debug('<<<<<<<----On page load criteria is :--->>>>>>>>>' + criteria);
     }
     RemovalOfDuplicateRecordsController obj = new RemovalOfDuplicateRecordsController();
     /**  
@@ -38,7 +41,6 @@ public with sharing class RemovalOfDuplicateLeadsBatchJob implements Database.Ba
                                          WHERE Email <> NULL
                                          AND Name <> NULL
                                         ]);*/
-        //}                              
     } // End of method
     
     /**
