@@ -77,20 +77,6 @@ private class TestQueryBuilderController {
     } // End of method
     
     /**
-     *  Method to test radio button selecting descending opion
-     */
-    static testMethod void testRadioButtonDescending() {
-        // Creating instance of class
-        QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        Test.startTest(); // Start test
-        objQueryBuilderController.selectedRadio='Descending';
-        List<SelectOption> testlistobject = objQueryBuilderController.getradioOptions();
-        Test.stopTest(); // Stop test
-        
-        //System.assertEquals('Descending',testlistobject.getLabel());
-    } // End of method
-    
-    /**
      *  Method to test number of records that query will retrieve
      */
     static testMethod void testNoOfRecords() {
@@ -126,7 +112,7 @@ private class TestQueryBuilderController {
     static testMethod void testQueryGeneration() {
         // Creating instance of classs 
         QueryBuilderController objQueryBuilderController = new QueryBuilderController();
-        String testQuery ='SELECT id, name FROM Account ORDER BY id DESC LIMIT 500';
+        String testQuery ='SELECT id, name FROM Account ORDER BY id DESC  LIMIT 500';
         objQueryBuilderController.selectedRadio = 'Descending';
         objQueryBuilderController.selectedNumber = 500;
         objQueryBuilderController.objectName = 'Account';
