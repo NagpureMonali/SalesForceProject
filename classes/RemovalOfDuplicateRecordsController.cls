@@ -1,14 +1,8 @@
-/**
- *  Here is controller for RemovalOfDuplicateRecords class 
- */
 public with sharing class RemovalOfDuplicateRecordsController {
     public String selectCriteria {get;set;}
     public String criteria;
     public String objectField {get;set;} 
     
-    /*
-     *  Here is constructor
-     */
     public RemovalOfDuplicateRecordsController() {
         //selectCriteria = 'Email';
         System.debug('=====on page load Criteria======' + criteria);
@@ -26,9 +20,6 @@ public with sharing class RemovalOfDuplicateRecordsController {
         return selectionCriteria;
     }
     
-    /**
-     *  This is the method which displays fields for selected criteria to batch class
-     */
     public void objectField() {
         System.debug('=====on button click selectCriteria======' + selectCriteria);
         criteria = selectCriteria;
@@ -43,5 +34,5 @@ public with sharing class RemovalOfDuplicateRecordsController {
                                  );
         //RemovalOfDuplicateLeadsBatchJob obj=new RemovalOfDuplicateLeadsBatchJob(criteria); 
         //database.executeBatch(obj,8); 
-    } // End of method
-} // End of class
+    }
+}

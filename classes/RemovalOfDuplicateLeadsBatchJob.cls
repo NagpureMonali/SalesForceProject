@@ -7,14 +7,14 @@
  *  3. The criteria to find the duplicate records should be configurable. 
 *************************************************************************************************/
 public with sharing class RemovalOfDuplicateLeadsBatchJob implements Database.Batchable <sObject>{
-    Map<String, Lead> mapUniqueToLead = new Map<String, Lead>();
-    List<Lead> leadList = new List<Lead>(); 
-    String criteria; 
-    String query='SELECT Id, Name, Email FROM Lead WHERE Name <> NULL AND Email <> NULL';
+    public Map<String, Lead> mapUniqueToLead = new Map<String, Lead>();
+    public List<Lead> leadList = new List<Lead>(); 
+    public String criteria; 
+    public String query = 'SELECT Id, Name, Email FROM Lead WHERE Name <> NULL AND Email <> NULL';
     public RemovalOfDuplicateLeadsBatchJob() {
         for (LeadName__c LeadNameInstance : LeadName__c.getAll().values()) {
             criteria = LeadNameInstance.Criteria__c;
-        }
+        } 
         System.debug('<<<<<<<----On page load criteria is :--->>>>>>>>>' + criteria);
     }
     RemovalOfDuplicateRecordsController obj = new RemovalOfDuplicateRecordsController();

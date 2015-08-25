@@ -90,6 +90,6 @@ public with sharing class ClosedWonOpportunityBatchJob  implements Database.Batc
     public class WrapperScheduleClosedWonOpportunity {
         List<Opportunity> opportunityList = new List<Opportunity>();
         Decimal amount = 0;
-        String Email;
+        String Email = '';
     } // End of method
 } // End of class
