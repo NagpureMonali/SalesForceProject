@@ -7,31 +7,51 @@ private class TestAccountContactController {
      * Method to test page redirect from account page to contact page 
      */
     static testMethod void testAccountRedirectToContact() {
-        PageReference  instancePageReference = Page.AccountTable;
+        PageReference instancePageReference = Page.AccountTable;
         Test.setCurrentPage(instancePageReference);
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
         String nextPage = objAccountContactController.redirectToContactPage().getUrl();
+        Test.stopTest(); // End test
         System.assertEquals('/apex/ContactTable?mona=null', nextPage);
     } // End of method
-    
+     
     /**
      * Method to test page redirect from contact page to account page 
      */
     static testMethod void testContactRedirectToAccount() {
         PageReference  instancePageReference = Page.ContactTable;
         Test.setCurrentPage(instancePageReference);
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
         String nextPage = objAccountContactController.redirectToAccountPage().getUrl();
+        Test.stopTest(); // End test
         System.assertEquals('/apex/accounttable', nextPage);
+    } // End of method
+    
+    /**
+     * Method to test page redirect from contact page to add new contact page 
+     */
+    static testMethod void testContactToNewContact() {
+        PageReference  instancePageReference = Page.AddNewContact;
+        Test.setCurrentPage(instancePageReference);
+        Test.startTest(); // Start test
+        AccountContactController objAccountContactController = new AccountContactController();
+        String nextPage = objAccountContactController.newContact().getUrl();
+        Test.stopTest(); // End test
+        System.assertEquals('/apex/AddNewContact', nextPage);
     } // End of method
     
     /**
      * Method to test page getting all account records to display 
      */
-    static testMethod void testAccountRecords() {       
+    static testMethod void testAccountRecords() {
+        TestDataFactory.createTestRecordsForAccount(5,'Test');
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
-        System.assertEquals(TestDataFactory.createTestRecordsForAccount(5,'Test').size(),
-                            objAccountContactController.getlistAccount().size());
+        objAccountContactController.listOfAllAccount();
+        Test.stopTest(); // End test
+        System.assertEquals(5,objAccountContactController.listAccount.size());
     } // End of method
     
     /**
@@ -44,13 +64,15 @@ private class TestAccountContactController {
             Contact contactInstance = new Contact(LastName = 'Test',
                                                   AccountId = accountInstance.id);
             contactList.add(contactInstance);
-        }
+        } // End of for loop
         insert contactList;
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
+        Test.stopTest(); // End test
         List<Contact> contactListInstance = [SELECT LastName,
-                                            AccountId
-                                     FROM Contact
-                                     ];
+                                                    AccountId
+                                             FROM Contact
+                                            ];
         for (Contact contactInstance : contactListInstance) {
             PageReference  instancePageReference = Page.AccountTable;
             Test.setCurrentPage(instancePageReference);
@@ -64,10 +86,13 @@ private class TestAccountContactController {
      * Method to test search account name 
      */
     static testMethod void testSearchAccountName() {       
-        List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(5,'Test Name');
+        List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(5,'TestAccount');
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
-        objAccountContactController.findName = 'Test Name';
-        System.assertEquals(true,objAccountContactController.searchAccount());
+        objAccountContactController.findName = 'TestAccount';
+        objAccountContactController.getsearchAccount();
+        Test.stopTest(); // End test
+        System.assertEquals(acccountList.size(),objAccountContactController.listAccount.size());
     } // End of method 
     
     /**
@@ -75,17 +100,13 @@ private class TestAccountContactController {
      */
     static testMethod void testAccountNameLessThan3Char() {       
         List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(5,'Test Name');
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
         objAccountContactController.findName = 'Te';
-        System.assertEquals(false,objAccountContactController.searchAccount());
-        List<Apexpages.Message> msgs = ApexPages.getMessages();
-        boolean newFlag = false;
-        for(Apexpages.Message msg : msgs){
-            if (msg.getDetail().contains('Input at least 3 characters to perform search')) {
-                newFlag = true;
-            } // End of if loop
-        } // End of for loop
-        System.assertEquals(true,newFlag);
+        objAccountContactController.getsearchAccount();
+        Test.stopTest(); // End test
+        List<Apexpages.Message> testMessage = ApexPages.getMessages();
+        System.assertEquals(1,testMessage.size());
     } // End of method 
     
     /**
@@ -94,20 +115,23 @@ private class TestAccountContactController {
     static testMethod void testDeleteContactRecord() {       
         List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(5,'Test Name');
         List<Contact> contactList = new List<Contact>();         
-        for(Account accountInstance : acccountList) {
+        for (Account accountInstance : acccountList) {
             Contact contactInstance = new Contact(LastName = 'TestContact',
                                                   AccountId = accountInstance.Id
                                                   );
             contactList.add(contactInstance );
         }
         insert contactList;
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
-        for(Contact contactInstance : contactList) {
+        Test.stopTest(); // End test
+        for (Contact contactInstance : contactList) {
             AccountContactController.contactToDelete(contactInstance.Id);
-        }
+        } // End of for loop
         List<Contact> contactListNew = [SELECT LastName 
                                         FROM Contact 
-                                        WHERE LastName = 'TestContact'];
+                                        WHERE LastName = 'TestContact'
+                                       ];
         System.assertEquals(0,contactListNew.size());
     } // End of method 
     
@@ -115,30 +139,90 @@ private class TestAccountContactController {
      * Method to test findname field gets clear
      */
     static testMethod void testClearField() {
+        Test.startTest(); // Start test
         AccountContactController objAccountContactController = new AccountContactController();
-        objAccountContactController.findname= 'Test';   
+        objAccountContactController.findname = 'Test';  
+        Test.stopTest(); // End test 
         System.assertEquals(null,objAccountContactController.getclearInputText());
+    } // End of method
+    
+    /**
+     * Method to test contact get saved or not
+     */
+    static testMethod void testContactSaved() {
+        Test.startTest(); // Start test
+        AccountContactController objAccountContactController = new AccountContactController();
+        List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(1,'TestName');         
+        for (Account accountInstance : acccountList) {
+            objAccountContactController.idOfAccount = accountInstance.Id;
+        } // End of for loop
+        PageReference instancePageReference = Page.ContactTable;
+        Test.setCurrentPage(instancePageReference);
+        instancePageReference.getparameters().put('accountId',objAccountContactController.idOfAccount);
+        objAccountContactController.contactName = 'TestContact';
+        objAccountContactController.contactPhone = '1234567';
+        String testPage = objAccountContactController.getsaveContact().getUrl();
+        Test.stopTest(); // End test
+        System.assertNotEquals('/apex/ContactTable?mona=',testPage);
+    } // End of method
+    
+    /**
+     * Method to test displaying alphabet list
+     */
+    static testMethod void testAlphabetList() {
+        Test.startTest(); // Start test
+        AccountContactController objAccountContactController = new AccountContactController();
+        List<String> sampleListOfAlphabet = objAccountContactController.getalphabetList();
+        Test.stopTest(); // End test
+        System.assertNotEquals(null,sampleListOfAlphabet.size());
     } // End of method
     
     /**
      * Method to test display contacts as specified alphabet
      */
     static testMethod void testAlphaSearch() {
-        List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(5,'Test Name');
+        AccountContactController objAccountContactController = new AccountContactController();
+        List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(1,'TestName');
         List<Contact> contactList = new List<Contact>();         
-        for(Account accountInstance : acccountList) {
+        for (Account accountInstance : acccountList) {
             Contact contactInstance = new Contact(LastName = 'TestContact',
                                                   AccountId = accountInstance.Id
                                                   );
-            contactList.add(contactInstance );
+            contactList.add(contactInstance ); 
+            objAccountContactController.idOfAccount = accountInstance.Id;
+        } // End of for loop
+        insert contactList;
+        String alphabetToSearch = 'T';
+        Test.startTest(); // Start test
+        PageReference instancePageReference = Page.ContactTable;
+        Test.setCurrentPage(instancePageReference);
+        instancePageReference.getparameters().put('alphabet',alphabetToSearch);
+        objAccountContactController.searchAlphabet();
+        Test.stopTest(); // End test      
+        System.assertEquals(1,objAccountContactController.listContact.size());
+    } // End of method
+    
+    /**
+     *  Method to test fetching account related contact records 
+     */
+     static testMethod void testAccountRelatedContact() {
+        AccountContactController objAccountContactController = new AccountContactController();
+        List<Account> acccountList = TestDataFactory.createTestRecordsForAccount(1,'TestName');
+        List<Contact> contactList = new List<Contact>();         
+        for (Account accountInstance : acccountList) {
+            Contact contactInstance = new Contact(LastName = 'TestContact',
+                                                  AccountId = accountInstance.Id
+                                                  );
+            contactList.add(contactInstance ); 
+            objAccountContactController.idOfAccount = accountInstance.Id;
         }
         insert contactList;
-        AccountContactController objAccountContactController = new AccountContactController();
-        PageReference  instancePageReference = Page.ContactTable;
+        Test.startTest(); // Start test
+        PageReference instancePageReference = Page.ContactTable;
         Test.setCurrentPage(instancePageReference);
-        objAccountContactController.alphabet='T';        
-        //ApexPages.currentPage().getParameters().put('alphabet','T');
-        System.assertEquals(5,objAccountContactController.getlistContact().size());
-       // System.assertEquals(contactList.size(),objAccountContactController.searchAlphabet().size());
-    } // End of method
+        instancePageReference.getparameters().put('mona',objAccountContactController.idOfAccount);
+        objAccountContactController.listOfAllAccountRelatedContact();
+        Test.stopTest(); // End test  
+        System.assertEquals(1,objAccountContactController.counter);
+     } // End of method
 } // End of test class

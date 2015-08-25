@@ -1,10 +1,13 @@
-<apex:page Controller="AccountContactController">
-	<apex:form>
+<apex:page Controller="AccountContactController"
+	action="{!listOfAllAccount}">
+	<apex:form >
+		<img src="{!$Resource.ImageForHeader}" width="150" height="85" />
 		<div align="center">
 			<apex:inputText Label="Search"
 				onkeypress="return enter_keypress(event)" value="{!findName}" />
-			<apex:actionFunction name="SearchAccount" action="{!searchAccount}" />
-			<apex:commandButton value="Search" action="{!searchAccount}"
+			<apex:actionFunction name="searchAccount"
+				action="{!getsearchAccount}" reRender="accountTable,newMessage" />
+			<apex:commandButton value="Search" action="{!getsearchAccount}"
 				reRender="accountTable,newMessage" />
 			<apex:pageMessages id="newMessage" />
 			<br />
@@ -12,36 +15,38 @@
 		</div>
 		<br />
 		<apex:pageBlock title="List of Accounts" id="refreshBlock">
-			<apex:pageBlockTable value="{!listAccount}" var="accObj"
-				id="accountTable">
-				<apex:column headerValue="Account Name">
-					<apex:outputLink value="/{!accObj.Id}">{!accObj.Name}</apex:outputLink>
-				</apex:column>
-				<apex:column value="{!accObj.Email_Address__c}" />
-				<apex:column value="{!accObj.Phone}" />
-				<apex:column value="{!accObj.Website}" />
-				<apex:column headerValue="Action">
-					<apex:commandButton value="Manage Contacts"
-						action="{!redirectToContactPage}" reRender="true">
-						<apex:param value="{!accObj.Id}" name="AccountName" />
-					</apex:commandButton>
-				</apex:column>
-			</apex:pageBlockTable>
-			<apex:facet name="footer">
-				<div align="center">
-					<h1>The total number of Records are : {!Count}</h1>
-				</div>
-			</apex:facet>
+			<apex:pageBlockSection columns="1" id="pbs2">
+				<apex:pageBlockTable value="{!listAccount}" var="accObj"
+					id="accountTable">
+					<apex:column headerValue="Account Name">
+						<apex:outputLink value="/{!accObj.Id}">{!accObj.Name}</apex:outputLink>
+					</apex:column>
+					<apex:column value="{!accObj.Email_Address__c}" />
+					<apex:column value="{!accObj.Phone}" />
+					<apex:column value="{!accObj.Website}" />
+					<apex:column headerValue="Action">
+						<apex:commandButton value="Manage Contacts"
+							action="{!redirectToContactPage}" reRender="true">
+							<apex:param value="{!accObj.Id}" name="accountId" />
+						</apex:commandButton>
+					</apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
 		</apex:pageBlock>
 		<apex:detail subject="{!$CurrentPage.parameters.cid}"
 			relatedList="false" title="false" />
+		<div align="center">
+			<h1>
+				The total number of records are:
+				<c:Counter counter="{!counter}" />
+			</h1>
+		</div>
 	</apex:form>
 	<script type='text/javascript'>
-		function enter_keypress(eventInstance) {
-		     System.debug('Inside event');
+		function enter_keypress() {
 			if (window.event && window.event.keyCode == 13
 					|| eventInstance.which == 13) {
-				searchAccount ();
+				searchAccount();
 				return false;
 			} else {
 				return true;

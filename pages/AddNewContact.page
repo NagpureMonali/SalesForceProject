@@ -1,0 +1,16 @@
+<apex:page controller="AccountContactController">
+	<apex:form >
+		<apex:pageBlock title="New Contact">
+			<apex:pageBlockSection >
+				<label>Last Name :</label>
+				<apex:inputText value="{!contactName}" />
+				<label>Phone :</label>
+				<apex:inputText value="{!contactPhone}" />
+			</apex:pageBlockSection>
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Save" action="{!getsaveContact}" />
+				<apex:commandButton value="Cancle" action="{!redirectToContactPage}" />
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
