@@ -2,8 +2,8 @@
  *  Mock test class for lead deletion
  **************************************************************************************************/
 @isTest // Annotation
-global with sharing class SOAPWebServiceMockForDelete implements WebServiceMock{
-    global void doInvoke(Object stub,
+public with sharing class SOAPWebServiceMockForDelete implements WebServiceMock{
+    public void doInvoke(Object stub,
                          Object request,
                          Map<String, Object> response,
                          String endpoint,

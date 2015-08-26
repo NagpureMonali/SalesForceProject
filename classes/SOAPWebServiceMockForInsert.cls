@@ -2,8 +2,8 @@
  *  Mock test class for lead creation
  **************************************************************************************************/
 @isTest // Annotation
-global class SOAPWebServiceMockForInsert implements WebServiceMock {
-    global void doInvoke(Object stub,
+public class SOAPWebServiceMockForInsert implements WebServiceMock {
+    public void doInvoke(Object stub,
                          Object request,
                          Map<String, Object> response,
                          String endpoint,

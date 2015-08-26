@@ -2,8 +2,8 @@
  *  Mock test class for lead updation
  **************************************************************************************************/
 @isTest // Annotation
-global class SOAPWebServiceMockForUpdate implements WebServiceMock {
-    global void doInvoke(Object stub,
+public class SOAPWebServiceMockForUpdate implements WebServiceMock {
+    public void doInvoke(Object stub,
                          Object request,
                          Map<String, Object> response,
                          String endpoint,
