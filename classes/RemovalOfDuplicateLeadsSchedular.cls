@@ -1,12 +1,4 @@
-/*global with sharing class RemovalOfDuplicateLeadsSchedular implements Schedulable {
-    public static string cron = '0 0 /3  * ?'; //after every 3 hours in a day.
-       public void execute(SchedulableContext sc)
-       {
-            Database.executeBatch(new RemovalOfDuplicateLeadsBatchJob());
-           // Database.executeBatch(leadInstance,5);
-       }
-}
-*/
+
 global with sharing class RemovalOfDuplicateLeadsSchedular implements Schedulable{
    // public static string cron = '0 0 /3    ?'; //after every 3 hours in a day.
     global void  execute(SchedulableContext sc) {
