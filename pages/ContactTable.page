@@ -1,53 +1,50 @@
-<apex:page Controller="AccountContactController">
+<apex:page Controller="AccountContactController"
+	action="{!listOfAllAccountRelatedContact}">
 	<apex:form >
-		<apex:pageBlock title="{!NameOfAccount.Name}">
+		<apex:includeScript value="{!URLFOR($Resource.DeleteContactScript, 'script.js')}" />
+		<apex:pageBlock title="{!accountName.Name}">
 			<div align="right">
-				<apex:repeat value="{!aplhaList}" var="listOfAlpha">
-					<apex:commandLink action="{!searchAplha}" rerender="tableContact">
-                            {!listOfAlpha}
-                            <apex:param value="{!listOfAlpha}" name="alpha" /> 
-                    </apex:commandLink> |
-				</apex:repeat>
+				<apex:repeat value="{!alphabetList}" var="signleAlphabet">
+					<apex:commandLink action="{!searchAlphabet}"
+						value="{!signleAlphabet}">
+						<apex:param name="alphabet" value="{!signleAlphabet}" />
+					</apex:commandLink> | 
+                </apex:repeat>
 			</div>
-			<apex:pageBlockTable value="{!listContact}" var="contactObj"
+			<apex:pageBlockTable value="{!wrapperListOfContact}" var="contactObj"
 				id="tableContact">
-				<apex:column value="{!contactObj.Id}" />
-				<apex:column value="{!contactObj.Name}" />
-				<apex:column value="{!contactObj.Department}" />
-				<apex:column value="{!contactObj.Email}" />
+				<apex:column >
+					<apex:inputCheckbox value="{!contactObj.selectedCheckbox}" />
+
+				</apex:column>
+				<apex:column value="{!contactObj.contactInstance.Id}" />
+				<apex:column value="{!contactObj.contactInstance.Name}" />
+				<apex:column value="{!contactObj.contactInstance.Department}" />
+				<apex:column value="{!contactObj.contactInstance.Email}" />
 				<apex:column headerValue="Action">
 					<apex:commandLink value="Delete"
-						onclick="deleteContact('{!contactObj.Id}')"
-						rerender="tableContact">
-						<apex:param value="{!contactObj.Id}" name="contactId" />
+						onclick="deleteContact('{!contactObj.contactInstance.Id}')"
+						rerender="tableContact" oncomplete="location.reload()">
+						<apex:param value="{!contactObj.contactInstance.Id}"
+							name="contactId" />
 					</apex:commandLink>
 				</apex:column>
 			</apex:pageBlockTable>
 			<div align="center">
-				<apex:commandButton value="Redirect"
-					action="{!redirectToAccountPage}" />
+				<apex:pageBlockButtons location="bottom">
+					<apex:commandButton value="Return"
+						action="{!redirectToAccountPage}" />
+					<apex:commandButton value="Add Contact" action="{!newContact}" />
+					<apex:commandButton value="Delete Multiple Contacts"
+						action="{!multipleDeleteContact}" />
+				</apex:pageBlockButtons>
 			</div>
-			<apex:facet name="footer">
-				<div align="center">
-					<h1>The total number of related Records are : {!Count}</h1>
-				</div>
-			</apex:facet>
 		</apex:pageBlock>
+		<div align="center">
+			<h1>
+				The total number of records are:
+				<c:Counter counter="{!counter}" />
+			</h1>
+		</div>
 	</apex:form>
-	<script type="text/javascript">
-        function deleteContact(idforContact)
-        {
-          Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.AccountContactController.contactToDelete}',
-                                                    idforContact, function(result, event){
-                                                    if (event.status) {
-                                                    alert(Id+ 'Record Deleted Succesfully..');
-                                                    } 
-                                                    else if(event.type === 'exception') {
-                                                    alert(Id+ 'Record can not deleted');
-                                                    } else {
-                                                    alert(Id+ 'Record can not eleted');
-                                                    }
-        });
-        }
-    </script>
 </apex:page>
