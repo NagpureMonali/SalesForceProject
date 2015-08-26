@@ -44,14 +44,14 @@
 
 		<apex:pageBlock>
 			<apex:commandButton value="Execute Query" action="{!displayQuery}"
-				rerender="textArea,textAreaResult,errorMessage" />
+				rerender="queryResult,queryResultTableResult,errorMessage" />
 			<br />
 			<br />
 			<h1>
 				SOQL Query : <br />
 			</h1>
 			<apex:inputTextArea value="{!query}" html-maxlength="100" rows="5"
-				cols="100" id="textArea" disabled="true" />
+				cols="100" id="queryResult" disabled="true" />
 			<br />
 			<apex:pageMessages id="errorMessage" />
 			<br />
@@ -61,17 +61,17 @@
 		</h1>
 		<apex:pageBlock>
 			<apex:pageblockButtons>
-				<apex:commandButton value="<<" rerender="textAreaResult"
+				<apex:commandButton value="<<" rerender="queryResultTable"
 					action="{!beginning}" />
-				<apex:commandButton value="<" rerender="textAreaResult"
+				<apex:commandButton value="<" rerender="queryResultTable"
 					action="{!previous}" />
-				<apex:commandButton value=">" rerender="textAreaResult"
+				<apex:commandButton value=">" rerender="queryResultTable"
 					action="{!next}" />
-				<apex:commandButton value=">>" rerender="textAreaResult"
+				<apex:commandButton value=">>" rerender="queryResultTable"
 					action="{!end}" />
 			</apex:pageblockButtons>
 			<apex:pageBlockTable value="{!queryResult}" var="SingleRecord"
-				id="textAreaResult">
+				id="queryResultTable">
 				<apex:repeat value="{!objectFieldName}" var="Record">
 					<apex:column value="{!SingleRecord[Record]}" />
 				</apex:repeat>
