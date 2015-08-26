@@ -1,7 +1,7 @@
 /*******************************************************************************
  *  It is controller class for Account And Contact Object
  ********************************************************************************/
-global with sharing class AccountContactController {
+public with sharing class AccountContactController {
     public List<Contact> listContact {get; set;}
     public List<Account> listAccount {get; set;}
     public List<String> alphabetList;
@@ -229,7 +229,7 @@ global with sharing class AccountContactController {
      * Remote method to delete contact records
      */
     @RemoteAction // Annotation
-    global static List<Contact> contactToDelete(Id idForContact) {
+    public static List<Contact> contactToDelete(Id idForContact) {
         System.debug('====contact id======' + idForContact);
         List<Contact> listContact = [SELECT ID 
                                      FROM Contact 
@@ -238,7 +238,8 @@ global with sharing class AccountContactController {
         delete listContact;
         List<Contact> newListContact = [SELECT ID 
                                         FROM Contact
+                                        WHERE Id = :idForContact
                                        ];
-        return listContact; 
+        return newListContact; 
     } // End of remote method
 } // End of class
