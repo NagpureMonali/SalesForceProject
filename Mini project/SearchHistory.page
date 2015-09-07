@@ -1,0 +1,40 @@
+<apex:page Controller="SearchHistoryController" tabStyle="Account">
+	<apex:form >
+		<!-- ===================Display list of query strings======================================-->
+		<apex:pageBlock title="Search History">
+			<apex:pageBlockTable value="{!Queries}" var="queryObj">
+				<apex:column >
+					<apex:commandLink action="{!showDetails}"
+						value="{!queryObj.Search_String__c}">
+						<apex:param name="searchString"
+							value="{!queryObj.Search_String__c}" />
+					</apex:commandLink>
+				</apex:column>
+			</apex:pageBlockTable>
+			<apex:commandButton value="first" action="{!setCon.first}" />
+			<apex:commandButton value="Previous" action="{!setCon.previous}" />
+			<apex:commandButton value="next" action="{!setCon.next}" />
+			<apex:commandButton value="last" action="{!setCon.last}" />
+		</apex:pageBlock>
+
+		<!-- ===================Display block ========================================-->
+		<apex:pageBlock title="Details" id="newBlock" rendered="{!flag}">
+
+			<!-- ===================Action status ========================================-->
+			<apex:outputPanel >
+				<apex:actionStatus id="SearchStatus" stopText="">
+					<apex:facet name="start">
+						<apex:image url="{!$Resource.Loading}" />
+					</apex:facet>
+				</apex:actionStatus>
+			</apex:outputPanel>
+
+			<!-- ==================Display table=======================================-->
+			<apex:pageBlockTable value="{!showDetailsOfQuery}" var="Record">
+				<apex:column value="{!Record.Title__c}" />
+				<apex:column value="{!Record.Link__c}" />
+				<apex:column value="{!Record.Description__c}" />
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
