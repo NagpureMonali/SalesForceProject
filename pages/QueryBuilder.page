@@ -1,0 +1,81 @@
+<apex:page controller="QueryBuilderController">
+	<apex:form id="form">
+
+		<apex:pageBlock>
+			<h1>
+				Select Object : <br />
+			</h1>
+			<apex:SelectList value="{!objectName}" size="1">
+				<apex:selectOption itemlabel="--None--" itemvalue=" " />
+				<apex:selectOptions value="{!allObjectName}" />
+				<apex:actionSupport event="onchange" action="{!getobjectFieldsName}"
+					reRender="form" />
+			</apex:SelectList>
+		</apex:pageBlock>
+
+		<apex:pageBlock>
+			<h1>
+				Select Fields : <br />
+			</h1>
+			<apex:SelectList value="{!objectFieldName}" size="5"
+				multiselect="true">
+				<apex:selectOptions value="{!selectedField}" />
+			</apex:SelectList>
+		</apex:pageBlock>
+
+		<apex:pageBlock>
+			<h1>
+				Sort As : <br />
+			</h1>
+			<apex:selectRadio value="{!selectedRadio}">
+				<apex:selectOptions value="{!radioOptions}" />
+			</apex:selectRadio>
+		</apex:pageBlock>
+
+		<apex:pageBlock>
+			<h1>
+				Maximum records to display : <br />
+			</h1>
+			<apex:SelectList value="{!selectedNumber}" size="1"
+				multiselect="false">
+				<apex:selectOptions value="{!listNumber}" />
+			</apex:SelectList>
+		</apex:pageBlock>
+
+		<apex:pageBlock>
+			<apex:commandButton value="Execute Query" action="{!displayQuery}"
+				rerender="queryResult,queryResultTableResult,errorMessage" />
+			<br />
+			<br />
+			<h1>
+				SOQL Query : <br />
+			</h1>
+			<apex:inputTextArea value="{!query}" html-maxlength="100" rows="5"
+				cols="100" id="queryResult" disabled="true" />
+			<br />
+			<apex:pageMessages id="errorMessage" />
+			<br />
+		</apex:pageBlock>
+		<h1>
+			Result of Query : <br />
+		</h1>
+		<apex:pageBlock>
+			<apex:pageblockButtons>
+				<apex:commandButton value="<<" rerender="queryResultTable"
+					action="{!beginning}" />
+				<apex:commandButton value="<" rerender="queryResultTable"
+					action="{!previous}" />
+				<apex:commandButton value=">" rerender="queryResultTable"
+					action="{!next}" />
+				<apex:commandButton value=">>" rerender="queryResultTable"
+					action="{!end}" />
+			</apex:pageblockButtons>
+			<apex:pageBlockTable value="{!queryResult}" var="SingleRecord"
+				id="queryResultTable">
+				<apex:repeat value="{!objectFieldName}" var="Record">
+					<apex:column value="{!SingleRecord[Record]}" />
+				</apex:repeat>
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

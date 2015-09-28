@@ -1,0 +1,18 @@
+<apex:component controller="SendResponseController" access="global">
+    <apex:attribute access="global" assignTo="{!queryId}" name="IdForQuery" type="String" required="true" description="Query Id"/> 
+    <b>Query String  Details</b> 
+    <br/>
+    <table border="2">
+        <apex:repeat value="{!ResponsesToSend}" var="response">
+            <tr>
+                <td>
+                    <b> {!response.Title__c} </b> 
+                    <br/>
+                    <a href="{!response.Link__c} ">{!response.Link__c}</a>
+                    <br/>
+                    <p> {!response.Description__c}<br/></p>
+                </td>
+            </tr>
+        </apex:repeat>
+    </table> 
+</apex:component>
