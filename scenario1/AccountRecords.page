@@ -1,0 +1,78 @@
+<apex:page Controller="ControllerAccountContact" id="p">
+	<apex:includeScript
+		value="{!URLFOR($Resource.Intercom, 'intercom.js')}" />
+	<apex:includeScript
+		value="{!URLFOR($Resource.Intercom, 'jquery.min.js')}" />
+	<apex:includeScript
+		value="{!URLFOR($Resource.Intercom, 'socket.io.js')}" />
+	<script>
+		$(function() {
+			alert('in script');
+			if (Intercom.supported) {
+				alert('in script excecuting');
+				var title = document.title;
+				//var $messages = jQuery( 'outputLink[id$=messages]' );
+				var $messages = $('#messages');
+				//var $form_broadcast = $('#form-broadcast'); 
+				var $form_broadcast = $('#frm');
+				var $input_message = $('#input-message');
+				var $input_submit = $('#input-broadcast');
+
+				var intercom = new Intercom();
+				intercom.on('notice', function(data) {
+					$messages.append($('<p>').text(data.message));
+					document.title = '(' + $messages[0].childNodes.length
+							+ ') ' + title;
+					//   var $a = jQuery( 'outputText[id$=msg]' );
+				    //	 alert('alert : ' + (data.message));
+					var res = (data.message).split(" ");
+					//  alert('res[0] : ' + res[0]);
+					//   alert('res[1] : ' + res[1]);
+					//    alert("msg"+res[1]);
+					document.getElementById("msg"+res[1]).innerHTML = res[0];
+                    //   alert('strmsg : ' + strmsg);
+                    //  alert('strid : ' + strid);
+                    //   alert('alert : ' + (data.message));
+					//var $a = document.getElementById('{!$Component.frm.msg}');
+					//alert('alert : ' + a );
+					// document.getElementById("{!$Component.p.frm.msg}").innerHTML = (data.message);
+					//document.getElementById("{!$Component.p.frm.msg}") = (data.message);
+				});
+			} else {
+				alert('intercom.js is not supported by your browser.');
+			}
+		});
+	</script>
+	<apex:form id="frm">
+		<apex:dataTable value="{!ListOfAllAccount}" var="account"
+			id="theTable" rowClasses="odd,even" styleClass="tableClass"
+			border="1">
+			<apex:column>
+				<apex:facet name="header">Id</apex:facet>
+				<apex:outputText value="{!account.Id}" />
+			</apex:column>
+			<apex:column>
+				<apex:facet name="header">Account Name</apex:facet>
+				<apex:outputText value="{!account.Name}" />
+			</apex:column>
+			<apex:column>
+				<apex:facet name="header">Website</apex:facet>
+				<apex:outputText value="{!account.Website}" />
+			</apex:column>
+			<apex:column>
+				<apex:facet name="header">Phone</apex:facet>
+				<apex:outputText value="{!account.Phone}" />
+			</apex:column>
+			<apex:column>
+				<apex:facet name="header">Action</apex:facet>
+				<apex:outputLink value="{!redirectToContactPage}" target="__blank"> 
+				    Create New Contact 
+					<apex:param value="{!account.Id}" name="accountId" />
+				</apex:outputLink>
+				<label id="msg{!account.Id}"></label>
+			</apex:column>
+		</apex:dataTable>
+				txt:
+		        <div id="messages"></div>
+	</apex:form>
+</apex:page>
