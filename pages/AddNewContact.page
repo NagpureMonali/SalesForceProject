@@ -1,0 +1,64 @@
+<apex:page controller="ControllerAccountContact">
+
+	<apex:includeScript
+		value="{!URLFOR($Resource.Intercom, 'intercom.js')}" />
+	<apex:includeScript
+		value="{!URLFOR($Resource.Intercom, 'jquery.min.js')}" />
+	<apex:includeScript
+		value="{!URLFOR($Resource.Intercom, 'socket.io.js')}" />
+	<script type="text/javascript"> 
+ $(function() {
+ alert('in script');
+              if (Intercom.supported) {
+                  alert('in script executing');
+                  var title = document.title;
+                  // var $form_broadcast=$('#form-broadcast');              
+                  // var $form_broadcast = $document.getElementById('form-broadcast');
+                  var $form_broadcast = jQuery( 'form[id$=frm]' );
+                  var $messages       = $('#messages'); // message to display
+                  //var $input_message  = $('#input-message'); // frm where u willl take message
+                  var $input_message  = jQuery( 'input[id$=input-message]' );
+                  //var $input_submit   = $('#input-broadcast'); // on button click send it
+                  var $input_submit   = jQuery( 'commandButton[id$=input-broadcast]' );
+                  var intercom = new Intercom();
+                  //   $("commandButton").click(function() {
+                  // $input_submit.click(function() {
+                  $form_broadcast.on('submit', function(data) { // submit = button type
+                      console.log(data.message);
+                      alert('message:' + $input_message.val() + ' {!idOfAccount}' );
+                      intercom.emit('notice', {message:$input_message.val() + ' {!idOfAccount}'}); 
+                      // send over all windows/tabs
+                      return false;
+                 });
+                 // same page pe display krna he to
+                 intercom.on('notice', function(data) { // to get response add listener
+                     $messages.append($('<p>').text(data.message)); // to change message
+                     document.title = '(' + $messages[0].childNodes.length + ') ' + title; 
+                     // to change document title
+                 });
+         //       });               
+              } else {
+                 alert('intercom.js is not supported by your browser.');
+              }
+});
+ </script>
+	<apex:form id="frm">
+		 text :
+		<div id="messages"></div>
+		<apex:commandLink value="Get Account ID" action="{!accountId}" />
+		<apex:pageBlock title="New Contact">
+			<apex:pageBlockSection>
+				<label>Account ID :</label> 
+				<apex:outputText value="{!idOfAccount}" />
+				<label>Last Name :</label>
+				<apex:inputText value="{!contactName}" id="input-message" />
+				<label>Phone :</label>
+				<apex:inputText value="{!contactPhone}" />
+			</apex:pageBlockSection>
+			<apex:pageBlockButtons>
+				<apex:commandButton value="Save" action="{!getsaveContact}"
+					id="input-broadcast" />
+			</apex:pageBlockButtons>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
