@@ -22,18 +22,15 @@ public with sharing class ControllerAccountContact {
      */
     public PageReference getredirectToContactPage() {
         idOfAccount = apexpages.currentpage().getparameters().get('accountId');
-        System.debug('--------Accountid idofaccount :-----------' + idOfAccount);
+        System.debug('--------Accountid :-----------' + idOfAccount);
         PageReference contactPage = Page.AddNewContact; 
         contactPage.getparameters().put('accountId',idOfAccount);
-        contactPage.setRedirect(True);
+        contactPage.setRedirect(false);
+        System.debug('--------Accountid 0000000:-----------' + idOfAccount);
         return contactPage; 
     } // End of method  
     
-    public void accountId() {
-        PageReference a = getredirectToContactPage();
-        System.debug('--------Accountid:-----------' + idOfAccount);
-    }
-    /**
+    /** 
      *  Here is the method which will save contact which is newly created
      */
     public PageReference getsaveContact() {

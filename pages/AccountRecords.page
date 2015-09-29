@@ -10,33 +10,18 @@
 			alert('in script');
 			if (Intercom.supported) {
 				alert('in script excecuting');
-				var title = document.title;
-				//var $messages = jQuery( 'outputLink[id$=messages]' );
-				var $messages = $('#messages');
-				//var $form_broadcast = $('#form-broadcast'); 
+				var title = document.title; 
+				var $messages = $('#messages'); 
 				var $form_broadcast = $('#frm');
 				var $input_message = $('#input-message');
 				var $input_submit = $('#input-broadcast');
-
+                
+                // To display message
 				var intercom = new Intercom();
 				intercom.on('notice', function(data) {
 					$messages.append($('<p>').text(data.message));
-					document.title = '(' + $messages[0].childNodes.length
-							+ ') ' + title;
-					//   var $a = jQuery( 'outputText[id$=msg]' );
-				    //	 alert('alert : ' + (data.message));
 					var res = (data.message).split(" ");
-					//  alert('res[0] : ' + res[0]);
-					//   alert('res[1] : ' + res[1]);
-					//    alert("msg"+res[1]);
 					document.getElementById("msg"+res[1]).innerHTML = res[0];
-                    //   alert('strmsg : ' + strmsg);
-                    //  alert('strid : ' + strid);
-                    //   alert('alert : ' + (data.message));
-					//var $a = document.getElementById('{!$Component.frm.msg}');
-					//alert('alert : ' + a );
-					// document.getElementById("{!$Component.p.frm.msg}").innerHTML = (data.message);
-					//document.getElementById("{!$Component.p.frm.msg}") = (data.message);
 				});
 			} else {
 				alert('intercom.js is not supported by your browser.');
@@ -44,6 +29,9 @@
 		});
 	</script>
 	<apex:form id="frm">
+	   <h2>List Of Accounts  </h2>
+	   <br/>
+	   <br/>
 		<apex:dataTable value="{!ListOfAllAccount}" var="account"
 			id="theTable" rowClasses="odd,even" styleClass="tableClass"
 			border="1">
@@ -65,14 +53,14 @@
 			</apex:column>
 			<apex:column>
 				<apex:facet name="header">Action</apex:facet>
-				<apex:outputLink value="{!redirectToContactPage}" target="__blank"> 
-				    Create New Contact 
-					<apex:param value="{!account.Id}" name="accountId" />
-				</apex:outputLink>
-				<label id="msg{!account.Id}"></label>
+				<div id="msg{!account.Id}">
+					<apex:commandLink action="{!getredirectToContactPage}"
+						value=" Create New Contact" target="__blank">
+						<apex:param value="{!account.Id}" name="accountId" />
+					</apex:commandLink>
+				</div>
 			</apex:column>
 		</apex:dataTable>
-				txt:
-		        <div id="messages"></div>
+		<div id="messages" hidden="true"></div>
 	</apex:form>
 </apex:page>
