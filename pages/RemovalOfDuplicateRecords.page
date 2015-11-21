@@ -1,0 +1,17 @@
+<apex:page controller="RemovalOfDuplicateRecordsController">
+	<apex:form id="formid">
+		<apex:pageBlock>
+			<h1>
+				Select Field For Selection Criteria : <br /> <br />
+			</h1>
+			<apex:SelectList value="{!selectCriteria}" size="1"
+				multiselect="false">
+				<apex:selectOption itemlabel="none" itemvalue=" " />
+				<apex:selectOptions value="{!fieldSelectionCriteria}" />
+			</apex:SelectList>
+			<apex:pageMessages id="message" />
+			<apex:commandButton action="{!objectField}" value="Submit"
+				rerender="message" />
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
