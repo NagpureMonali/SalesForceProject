@@ -35,5 +35,12 @@ private class TestUpdateCaseHandler {
         listCaseInstance = UpdateCaseHandler.caseToUpdate(listCase);
         Test.stopTest(); // End test
         // remain to test the final result
+        // for(Case caseInstance : listCase) {
+        // System.assertequals(listCase.AccountId,listCaseInstance.AccountId);
+        // }
+        // list<Case> listCase=[SELECT AccountId FROM Case WHERE SuppliedEmail__c='test@test.com'];
+        // for(Case caseInstance :listCase) {
+        // System.assertequals(testAccount.Id,caseInstance.AccountId,'Matching account ID and Contact Lookup Id');
+        //  } // End of for loop
     } // End of method
 } // End of test class
